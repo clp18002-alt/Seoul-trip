@@ -156,18 +156,37 @@ to   { opacity:1;  transform:scale(1.05); }
 .map-title { font-family:‘M PLUS Rounded 1c’,sans-serif; font-weight:900; font-size:clamp(36px,8vw,62px); color:var(–deep); text-align:center; line-height:.95; margin-bottom:36px; }
 .map-title em { font-style:normal; color:var(–hot); text-shadow:3px 3px 0 rgba(255,28,168,.2); }
 .map-title strong { display:block; color:var(–purple); font-size:.45em; letter-spacing:6px; }
-.map-wrap { max-width:760px; margin:0 auto 48px; position:relative; aspect-ratio:4/3; filter:drop-shadow(0 8px 30px rgba(255,28,168,.2)); }
-.map-wrap svg { position:absolute; inset:0; width:100%; height:100%; }
-.mp { position:absolute; display:flex; flex-direction:column; align-items:center; cursor:pointer; z-index:10; transform:translate(-50%,-100%); transition:transform .2s; }
-.mp:hover { transform:translate(-50%,-100%) scale(1.1); }
-.pp { width:68px; height:68px; border-radius:10px; border:3px solid #fff; box-shadow:3px 3px 0 rgba(255,28,168,.35); background:#FFD6F0; display:flex; align-items:center; justify-content:center; font-size:28px; }
-.pt { width:2px; height:10px; background:var(–hot); border-radius:2px; }
-.pd { width:8px; height:8px; border-radius:50%; background:var(–hot); border:2px solid #fff; box-shadow:0 0 6px rgba(255,28,168,.6); margin-top:-2px; }
-.pl { background:var(–deep); color:#fff; font-family:‘M PLUS Rounded 1c’,sans-serif; font-weight:800; font-size:10px; padding:3px 9px; border-radius:4px; margin-top:4px; white-space:nowrap; box-shadow:2px 2px 0 rgba(0,0,0,.2); transition:background .2s; }
-.mp:hover .pl { background:var(–hot); }
-.plane-ico { position:absolute; font-size:26px; animation:fly 5s ease-in-out infinite alternate; filter:drop-shadow(0 2px 4px rgba(0,0,0,.15)); }
-@keyframes fly { from{transform:rotate(-30deg) translate(0,0)} to{transform:rotate(-30deg) translate(10px,-8px)} }
-.plbl { position:absolute; font-size:10px; font-weight:900; color:#999; letter-spacing:1px; transform:translate(-50%,-50%); font-family:‘M PLUS Rounded 1c’,sans-serif; }
+.gmap-wrap {
+max-width:760px; margin:0 auto 48px;
+position:relative; border-radius:20px; overflow:hidden;
+box-shadow:5px 5px 0 rgba(255,28,168,.2), 0 8px 40px rgba(0,0,0,.1);
+border:2px solid #FFB3E6;
+aspect-ratio:4/3;
+}
+.gmap-iframe {
+width:100%; height:100%; border:none; display:block;
+}
+.gmap-fallback {
+display:none; position:absolute; inset:0;
+background:linear-gradient(160deg,#FDE8FF,#FFD6F0);
+align-items:center; justify-content:center; text-align:center;
+}
+.gmap-fallback.show { display:flex; }
+.gmap-fallback-title {
+font-family:‘M PLUS Rounded 1c’,sans-serif; font-weight:900;
+font-size:20px; color:var(–deep); margin-bottom:8px;
+}
+.gmap-fallback-sub {
+font-size:13px; color:#999; margin-bottom:20px;
+}
+.gmap-btn {
+display:inline-block; background:var(–hot); color:#fff;
+font-family:‘M PLUS Rounded 1c’,sans-serif; font-weight:900;
+font-size:14px; padding:12px 24px; border-radius:8px;
+text-decoration:none; box-shadow:3px 3px 0 rgba(255,28,168,.3);
+transition:all .2s;
+}
+.gmap-btn:hover { transform:translate(-2px,-2px); box-shadow:5px 5px 0 rgba(255,28,168,.4); }
 
 /* OVERVIEW GRID */
 .ov-grid { max-width:760px; margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); background:#fff; border-radius:16px; overflow:hidden; border:2px solid #FFB3E6; box-shadow:5px 5px 0 rgba(255,28,168,.2); }
@@ -201,6 +220,13 @@ to   { opacity:1;  transform:scale(1.05); }
 .dacts { background:rgba(0,0,0,.25); padding:18px 22px; }
 .act { display:flex; gap:12px; padding:9px 0; border-bottom:1px solid rgba(255,255,255,.1); }
 .act:last-child { border-bottom:none; }
+.act-group-label {
+font-family:‘M PLUS Rounded 1c’,sans-serif; font-weight:900;
+font-size:10px; letter-spacing:2px; text-transform:uppercase;
+color:var(–yellow); background:rgba(255,255,255,.1);
+padding:4px 10px; border-radius:4px;
+margin:8px 0 4px; display:inline-block;
+}
 .atime { font-family:‘M PLUS Rounded 1c’,sans-serif; font-weight:900; font-size:10px; color:var(–yellow); min-width:46px; padding-top:2px; }
 .aname { font-size:13px; font-weight:800; color:#fff; line-height:1.3; }
 .anote { font-size:11px; font-weight:500; color:rgba(255,255,255,.6); margin-top:2px; }
@@ -232,8 +258,38 @@ to   { opacity:1;  transform:scale(1.05); }
 .sc { background:#fff; border-radius:12px; padding:22px 18px; border:2px solid #FFB3E6; box-shadow:3px 3px 0 #FFB3E6; transition:all .2s; }
 .sc:hover { transform:translate(-2px,-2px); box-shadow:5px 5px 0 var(–hot); border-color:var(–hot); }
 .si { font-size:34px; margin-bottom:10px; display:block; }
-.sn { font-family:‘M PLUS Rounded 1c’,sans-serif; font-weight:900; font-size:15px; margin-bottom:6px; color:var(–deep); }
-.sd { font-size:12px; font-weight:700; color:#999; line-height:1.6; }
+.sp-intro { font-size:14px; color:#aaa; font-weight:700; margin-bottom:36px; }
+.sp-area-block { margin-bottom:48px; }
+.sp-area-label {
+display:flex; align-items:center; gap:10px;
+font-family:‘M PLUS Rounded 1c’,sans-serif; font-weight:900;
+font-size:20px; color:var(–deep);
+padding:14px 20px; margin-bottom:16px;
+background:linear-gradient(135deg,#FFD6F0,#F0CCFF);
+border-radius:12px; border-left:5px solid var(–hot);
+}
+.sp-area-icon { font-size:22px; }
+.sp-cat-label {
+font-family:‘M PLUS Rounded 1c’,sans-serif; font-weight:900;
+font-size:13px; color:var(–hot); letter-spacing:2px;
+margin:20px 0 10px; padding-left:4px;
+border-left:3px solid var(–hot);
+padding-left:10px;
+}
+.sp-tip {
+font-size:12px; font-weight:700; color:#fff;
+background:var(–hot); border-radius:8px;
+padding:8px 14px; margin:8px 0 16px;
+display:inline-block;
+}
+.sc-link {
+text-decoration:none; color:inherit; display:block;
+}
+.sc-link:hover .sc-map { opacity:1; }
+.sc-map {
+font-size:11px; font-weight:800; color:var(–hot);
+margin-top:8px; opacity:0.6; transition:opacity .2s;
+}
 
 /* PACKING */
 .pk-sec { background:linear-gradient(160deg,#160025 0%,#2E0050 50%,#160025 100%); padding:70px 24px; position:relative; overflow:hidden; }
@@ -344,6 +400,93 @@ color:rgba(255,220,240,.85);
 letter-spacing:6px;
 text-shadow:0 0 12px rgba(255,180,220,.5);
 }
+
+/* TABLE OF CONTENTS */
+.toc {
+background:#fff;
+border-bottom:2px solid #FFB3E6;
+position:sticky; top:0; z-index:100;
+box-shadow:0 2px 16px rgba(255,28,168,.1);
+}
+.toc-inner {
+max-width:960px; margin:0 auto;
+padding:12px 20px;
+display:flex; align-items:center; gap:20px; flex-wrap:wrap;
+}
+.toc-title {
+font-family:‘M PLUS Rounded 1c’,sans-serif; font-weight:900;
+font-size:13px; color:var(–hot); white-space:nowrap;
+letter-spacing:1px;
+}
+.toc-links {
+display:flex; gap:8px; flex-wrap:wrap;
+}
+.toc-link {
+font-family:‘M PLUS Rounded 1c’,sans-serif; font-weight:800;
+font-size:12px; color:var(–deep);
+background:#FFF0FA; border:1.5px solid #FFB3E6;
+padding:5px 12px; border-radius:20px;
+text-decoration:none; white-space:nowrap;
+transition:all .2s;
+}
+.toc-link:hover {
+background:var(–hot); color:#fff; border-color:var(–hot);
+transform:translateY(-1px);
+}
+
+/* HOTEL */
+.hotel-sec { background:#fff; padding:70px 24px; position:relative; }
+.hotel-sec::before { content:””; position:absolute; inset:0; background-image:radial-gradient(circle,rgba(200,150,220,.05) 1px,transparent 1px); background-size:28px 28px; pointer-events:none; }
+.hotel-card {
+max-width:700px; margin:0 auto;
+background:linear-gradient(160deg,#FDE8FF,#FFD6F0 60%,#fff);
+border-radius:20px; padding:36px;
+border:2px solid #FFB3E6;
+box-shadow:5px 5px 0 rgba(255,28,168,.15);
+}
+.hotel-map-btn-wrap { margin-bottom:28px; }
+.hotel-map-btn {
+display:inline-flex; align-items:center; gap:8px;
+background:var(–hot); color:#fff;
+font-family:“M PLUS Rounded 1c”,sans-serif; font-weight:900;
+font-size:14px; padding:12px 24px; border-radius:10px;
+text-decoration:none; box-shadow:3px 3px 0 rgba(255,28,168,.3);
+transition:all .2s;
+}
+.hotel-map-btn:hover { transform:translate(-2px,-2px); box-shadow:5px 5px 0 rgba(255,28,168,.4); }
+.hotel-info-grid {
+display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px;
+}
+@media(max-width:500px){ .hotel-info-grid { grid-template-columns:1fr; } }
+.hotel-info-item {
+background:#fff; border-radius:12px; padding:18px 20px;
+border:1.5px solid #FFB3E6;
+}
+.hotel-info-label {
+font-family:“M PLUS Rounded 1c”,sans-serif; font-weight:900;
+font-size:11px; color:var(–hot); letter-spacing:2px; margin-bottom:6px;
+}
+.hotel-info-val {
+font-family:“M PLUS Rounded 1c”,sans-serif; font-weight:900;
+font-size:15px; color:var(–deep); margin-bottom:4px;
+}
+.hotel-info-sub { font-size:12px; font-weight:700; color:#aaa; }
+.hotel-notice {
+background:#fff; border-radius:12px; padding:16px 20px;
+border-left:4px solid var(–hot); margin-bottom:12px;
+}
+.hotel-notice-soft { border-left-color:var(–purple); }
+.hotel-notice:last-child { margin-bottom:0; }
+.hotel-notice-title {
+font-family:“M PLUS Rounded 1c”,sans-serif; font-weight:900;
+font-size:13px; color:var(–deep); margin-bottom:6px;
+}
+.hotel-notice-text { font-size:13px; font-weight:700; color:#777; line-height:1.7; }
+
+/* スクロール位置補正（sticky navの高さ分） */
+[id^=“sec-”] {
+scroll-margin-top: 60px;
+}
 </style>
 
 </head>
@@ -371,85 +514,171 @@ text-shadow:0 0 12px rgba(255,180,220,.5);
 
 <div class="ticker">💄 大玉企画 ★ アイドルメイク体験 💫 みんなでアイドルになろう！ 🎤 K-POP 완전정복</div>
 
+<!-- TABLE OF CONTENTS -->
+
+<nav class="toc" id="toc">
+  <div class="toc-inner">
+    <div class="toc-title">📋 もくじ</div>
+    <div class="toc-links">
+      <a href="#sec-map" class="toc-link">🗺️ スケジュール概要</a>
+      <a href="#sec-schedule" class="toc-link">📅 3日間の旅程</a>
+      <a href="#sec-makeup" class="toc-link">💄 アイドルメイク体験</a>
+      <a href="#sec-packing" class="toc-link">🎒 持ち物リスト</a>
+      <a href="#sec-spots" class="toc-link">📍 おすすめスポット</a>
+      <a href="#sec-hotel" class="toc-link">🏨 ホテル情報</a>
+      <a href="#sec-tips" class="toc-link">💡 知っておきたい情報</a>
+    </div>
+  </div>
+</nav>
+
 <!-- MAP PAGE -->
 
-<div class="map-pg">
-  <div class="slbl c">OVERALL SCHEDULE</div>
-  <h2 class="map-title"><em>Seoul</em><strong>旅のぜんぶ</strong></h2>
-  <div class="map-wrap">
-    <svg viewBox="0 0 600 450" xmlns="http://www.w3.org/2000/svg">
-      <defs><filter id="sh"><feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="rgba(255,28,168,.15)"/></filter></defs>
-      <path d="M160,60 L200,45 L250,42 L300,38 L360,44 L410,55 L450,70 L470,95 L480,125 L475,155 L465,180 L470,210 L460,240 L445,265 L430,285 L415,300 L395,315 L370,325 L340,330 L310,335 L280,338 L250,335 L220,328 L195,315 L175,300 L158,282 L145,260 L138,235 L135,208 L132,180 L135,155 L140,128 L145,100 L150,80 Z" fill="#EEE4C5" stroke="#D4C89A" stroke-width="2" filter="url(#sh)"/>
-      <path d="M130,230 Q180,218 230,222 Q290,228 340,220 Q400,210 460,222 Q490,228 510,232" fill="none" stroke="#7BC8F6" stroke-width="13" stroke-linecap="round" opacity=".75"/>
-      <path d="M130,230 Q180,218 230,222 Q290,228 340,220 Q400,210 460,222 Q490,228 510,232" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".35" stroke-dasharray="8 12"/>
-    </svg>
-    <div class="plbl" style="left:26%;top:40%">Hongdae</div>
-    <div class="plbl" style="left:38%;top:47%">Seoul St.</div>
-    <div class="plbl" style="left:50%;top:38%">Myeongdong</div>
-    <div class="plbl" style="left:64%;top:33%">Dongdaemun</div>
-    <div class="plbl" style="left:72%;top:52%">Seongsu</div>
-    <div class="plbl" style="left:8%;top:66%;color:#7BC8F6">Incheon ✈</div>
-    <div class="plane-ico" style="left:13%;top:62%">✈️</div>
-    <div class="mp" style="left:50%;top:38%"><div class="pp">🛍️</div><div class="pt"></div><div class="pd"></div><div class="pl">明洞でお買物</div></div>
-    <div class="mp" style="left:65%;top:28%"><div class="pp">🌃</div><div class="pt"></div><div class="pd"></div><div class="pl">東大門・夜のお買物</div></div>
-    <div class="mp" style="left:74%;top:48%"><div class="pp">💄</div><div class="pt"></div><div class="pd"></div><div class="pl">💄アイドルメイク体験</div></div>
-    <div class="mp" style="left:26%;top:40%"><div class="pp">📸</div><div class="pt"></div><div class="pd"></div><div class="pl">弘大・フォトブース</div></div>
-    <div class="mp" style="left:42%;top:24%"><div class="pp">🏛️</div><div class="pt"></div><div class="pd"></div><div class="pl">景福宮</div></div>
+<div class="map-pg" id="sec-map">
+  <div class="slbl c">SPOT MAP</div>
+  <h2 class="map-title"><em>Seoul</em><strong>行き先マップ</strong></h2>
+  <div class="gmap-wrap">
+    <iframe
+      src="https://www.google.com/maps/d/embed?mid=niuuZEzPIfWc16A7fCSEeA"
+      class="gmap-iframe"
+      allowfullscreen
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+    <div class="gmap-fallback" id="gmapFallback">
+      <div class="gmap-fallback-inner">
+        <div style="font-size:48px;margin-bottom:16px">🗺️</div>
+        <div class="gmap-fallback-title">Googleマップで見る</div>
+        <div class="gmap-fallback-sub">タップしてマップリストを開く</div>
+        <a href="https://www.google.com/maps/placelists/list/niuuZEzPIfWc16A7fCSEeA?token=BEess9TSJnY&g_ep=CAISEjI2LjExLjEuODgxMDA1NjQ2MBgAILffASpSLDk0Mjk3Njk5LDEwMDgwNDUwOCw5NDI4NDUwNSw5NDIzMTE4OCw5NDI4MDU2OCw0NzA3MTcwNCw5NDIxODY0MSw5NDI4MjEzNCw5NDI4Njg2OUICSlA%3D&skid=3baf2972-f8fb-4828-ac5a-a4c4848bfc86&g_st=i" target="_blank" class="gmap-btn">📍 マップリストを開く →</a>
+      </div>
+    </div>
   </div>
   <div class="ov-grid">
     <div class="ov-day">
-      <div class="ov-n">day1</div><div class="ov-s">Arrival Day</div>
-      <div class="ov-i"><div class="ov-bar p"></div><div class="ov-t">✈️ 空港から宿へ<small>仁川→ソウル市内</small></div></div>
-      <div class="ov-i"><div class="ov-bar p"></div><div class="ov-t">🛍️ 荷物置いてショッピング<small>明洞コスメ爆買い！</small></div></div>
-      <div class="ov-i"><div class="ov-bar p"></div><div class="ov-t">😴 アイドル体験に向けて早く寝る<small>明日の大玉のために英気を養う</small></div></div>
+      <div class="ov-n">day1</div><div class="ov-s">5/15 Arrival</div>
+      <div class="ov-i"><div class="ov-bar p"></div><div class="ov-t">🏙️ 名古屋組 12:30発<small>仁川 14:35着</small></div></div>
+      <div class="ov-i"><div class="ov-bar p"></div><div class="ov-t">🗼 東京組 14:20発<small>仁川 17:05着</small></div></div>
+      <div class="ov-i"><div class="ov-bar p"></div><div class="ov-t">💱 ホテルチェックイン→明洞で両替<small>レートのいい路地裏両替所へ</small></div></div>
+      <div class="ov-i"><div class="ov-bar p"></div><div class="ov-t">📍 明洞で全員合流<small>ショッピング・屋台ごはん</small></div></div>
     </div>
     <div class="ov-day hl">
-      <div class="ov-n">day2</div><div class="ov-s">Main Event Day</div>
-      <div class="ov-i"><div class="ov-bar pk"></div><div class="ov-t">💄 アイドルメイク体験<span class="spill">大玉</span><small>みんなでアイドルに変身！</small></div></div>
-      <div class="ov-i"><div class="ov-bar pk"></div><div class="ov-t">🎉 解放されて爆食&ショッピング<small>サムギョプサル・弘大散策</small></div></div>
+      <div class="ov-n">day2</div><div class="ov-s">5/16 Main Event</div>
+      <div class="ov-i"><div class="ov-bar pk"></div><div class="ov-t">💄 アイドルメイク体験<span class="spill">大玉</span><small>前半5人 9〜11時 / 後半4人 11〜13時</small></div></div>
+      <div class="ov-i"><div class="ov-bar pk"></div><div class="ov-t">🌊 14:30 漢江でラーメン<small>全員合流！</small></div></div>
+      <div class="ov-i"><div class="ov-bar pk"></div><div class="ov-t">🥩 夜はサムギョプサル<small>打ち上げ🍺</small></div></div>
     </div>
     <div class="ov-day">
-      <div class="ov-n">day3</div><div class="ov-s">Last Day</div>
-      <div class="ov-i"><div class="ov-bar b"></div><div class="ov-t">😢 惜しみながら最後の観光<small>カロスキル・お土産購入</small></div></div>
-      <div class="ov-i"><div class="ov-bar b"></div><div class="ov-t">✈️ 空港へ向かい帰宅<small>楽しい思い出と荷物とともに</small></div></div>
+      <div class="ov-n">day3</div><div class="ov-s">5/17 Last Day</div>
+      <div class="ov-i"><div class="ov-bar b"></div><div class="ov-t">🔜 午前の予定は調整中<small>決まり次第更新！</small></div></div>
+      <div class="ov-i"><div class="ov-bar b"></div><div class="ov-t">🏙️ 名古屋組 15:05発<small>中部 17:00着</small></div></div>
+      <div class="ov-i"><div class="ov-bar b"></div><div class="ov-t">🗼 東京組 15:00発<small>成田 17:40着</small></div></div>
     </div>
   </div>
 </div>
 
 <!-- SCHEDULE -->
 
-<div class="sch-bg">
+<div class="sch-bg" id="sec-schedule">
   <div class="inn">
     <div class="slbl" style="color:rgba(255,111,207,.7)">SCHEDULE</div>
     <h2 class="stitle w">3日間の旅程</h2>
     <div class="days-grid">
-      <div class="dc dc1">
-        <div class="dh"><span class="dn">1</span><div><div class="dht">到着 &amp; 明洞探索</div><div class="dhs">Arrival Day</div></div></div>
-        <div class="dacts">
-          <div class="act"><span class="atime">AM</span><div><div class="aname">✈️ 仁川国際空港 到着</div><div class="anote">空港リムジンまたは電車でソウル市内へ</div></div></div>
-          <div class="act"><span class="atime">昼</span><div><div class="aname">🍜 広蔵市場でランチ</div><div class="anote">マンドゥ・チヂミ・ビビンバを堪能！</div></div></div>
-          <div class="act"><span class="atime">午後</span><div><div class="aname">🛍️ 明洞でコスメショッピング</div><div class="anote">OLIVE YOUNG必訪！韓国コスメを爆買い</div></div></div>
-          <div class="act"><span class="atime">夕方</span><div><div class="aname">🌆 Nソウルタワー 夜景鑑賞</div><div class="anote">ケーブルカーで登ってソウル一望</div></div></div>
-          <div class="act"><span class="atime">夜</span><div><div class="aname">🍻 明洞屋台で夕食 &amp; 乾杯</div><div class="anote">トッポギ・ホットク・屋台グルメ三昧</div></div></div>
+
+```
+  <!-- DAY 1 -->
+  <div class="dc dc1">
+    <div class="dh"><span class="dn">1</span><div><div class="dht">5/15（金）到着 Day</div><div class="dhs">Arrival Day</div></div></div>
+    <div class="dacts">
+
+      <div class="act-group-label">🏙️ 名古屋組</div>
+      <div class="act"><span class="atime">12:30</span><div><div class="aname">✈️ 中部国際空港 出発</div><div class="anote">→ 仁川 14:35 着</div></div></div>
+
+      <div class="act-group-label">🗼 東京組</div>
+      <div class="act"><span class="atime">14:20</span><div><div class="aname">✈️ 成田空港 出発</div><div class="anote">→ 仁川 17:05 着</div></div></div>
+
+      <div class="act-group-label">🇰🇷 全員合流</div>
+      <div class="act"><span class="atime">夕方</span><div><div class="aname">🏨 ホテルにチェックイン</div><div class="anote">荷物を置いて身軽になろう！</div></div></div>
+      <div class="act"><span class="atime">夕方</span><div><div class="aname">💱 明洞で両替</div><div class="anote">明洞の路地裏両替所がレートよし◎ まとめて替えておくと便利！</div></div></div>
+      <div class="act"><span class="atime">夕方</span><div><div class="aname">📍 明洞で待ち合わせ</div><div class="anote">東京組の到着に合わせて全員合流！</div></div></div>
+      <div class="act"><span class="atime">夜</span><div><div class="aname">🛍️ 明洞でショッピング</div><div class="anote">OLIVE YOUNG・コスメ爆買いタイム</div></div></div>
+      <div class="act"><span class="atime">夜</span><div><div class="aname">🍢 明洞屋台でごはん</div><div class="anote">トッポギ・ホットク・屋台グルメ三昧！</div></div></div>
+    </div>
+  </div>
+
+  <!-- DAY 2 -->
+  <div class="dc dc2">
+    <div class="dh"><span class="dn">2</span><div><div class="dht">5/16（土）大玉企画 Day</div><div class="dhs">Main Event Day</div></div></div>
+    <div class="dacts">
+      <div class="act"><span class="atime">〜9時</span><div><div class="aname">🌅 自由行動</div><div class="anote">各自でカフェ・朝ごはんを</div></div></div>
+
+      <div class="act-group-label">💄 前半組（5人）</div>
+      <div class="act"><span class="atime">9:00</span><div><div class="aname">💄 ヘアメイク開始（3人）</div><div class="anote">レイチェル・のえぽん・むーみん</div></div></div>
+      <div class="act"><span class="atime">10:00</span><div><div class="aname">💄 ヘアメイク開始（2人）</div><div class="anote">まきほ・みんてぃあ</div></div></div>
+      <div class="act"><span class="atime">11:00</span><div><div class="aname">📸 前半5人 撮影<span class="dbadge">大玉</span></div><div class="anote">レイチェル・のえぽん・むーみん・まきほ・みんてぃあ</div></div></div>
+
+      <div class="act-group-label">💄 後半組（4人）</div>
+      <div class="act"><span class="atime">11:00</span><div><div class="aname">💄 ヘアメイク開始（2人）</div><div class="anote">のん・ありす</div></div></div>
+      <div class="act"><span class="atime">12:00</span><div><div class="aname">💄 ヘアメイク開始（2人）</div><div class="anote">あやねちゃん・める</div></div></div>
+      <div class="act"><span class="atime">13:00</span><div><div class="aname">📸 後半4人 撮影<span class="dbadge">大玉</span></div><div class="anote">のん・ありす・あやねちゃん・める</div></div></div>
+
+      <div class="act-group-label">🎉 全員合流</div>
+      <div class="act"><span class="atime">14:30</span><div><div class="aname">🌊 漢江（ハンガン）集合</div><div class="anote">漢江公園でラーメンを食べよう！</div></div></div>
+      <div class="act"><span class="atime">夜</span><div><div class="aname">🥩 サムギョプサルで夕ごはん</div><div class="anote">最高の思い出を語らいながら乾杯！</div></div></div>
+    </div>
+  </div>
+
+  <!-- DAY 3 -->
+  <div class="dc dc3">
+    <div class="dh"><span class="dn">3</span><div><div class="dht">5/17（日）帰国 Day</div><div class="dhs">Last Day</div></div></div>
+    <div class="dacts">
+      <div class="act"><span class="atime">午前〜昼</span><div><div class="aname">🔜 午前の予定は調整中</div><div class="anote">決まり次第更新します！</div></div></div>
+
+      <div class="act-group-label">🏙️ 名古屋組</div>
+      <div class="act"><span class="atime">15:05</span><div><div class="aname">✈️ 仁川 出発</div><div class="anote">→ 中部国際空港 17:00 着</div></div></div>
+
+      <div class="act-group-label">🗼 東京組</div>
+      <div class="act"><span class="atime">15:00</span><div><div class="aname">✈️ 仁川 出発</div><div class="anote">→ 成田空港 17:40 着</div></div></div>
+    </div>
+  </div>
+
+</div>
+```
+
+  </div>
+</div>
+
+<!-- HOTEL -->
+
+<div class="hotel-sec" id="sec-hotel">
+  <div class="inn">
+    <div class="slbl">HOTEL</div>
+    <h2 class="stitle" style="margin-bottom:32px">🏨 ホテル情報</h2>
+    <div class="hotel-card">
+      <div class="hotel-main">
+        <div class="hotel-map-btn-wrap">
+          <a href="https://maps.app.goo.gl/khU4z7hN1gaGYbP2A" target="_blank" class="hotel-map-btn">
+            📍 Googleマップで見る →
+          </a>
         </div>
-      </div>
-      <div class="dc dc2">
-        <div class="dh"><span class="dn">2</span><div><div class="dht">★ 大玉企画 Day</div><div class="dhs">Main Event Day</div></div></div>
-        <div class="dacts">
-          <div class="act"><span class="atime">朝</span><div><div class="aname">☕ 聖水洞でカフェ巡り</div><div class="anote">インスタ映えカフェでモーニング</div></div></div>
-          <div class="act"><span class="atime">午前</span><div><div class="aname">🏛️ 景福宮 観光</div><div class="anote">チマチョゴリ体験もオプションで◎</div></div></div>
-          <div class="act"><span class="atime">午後</span><div><div class="aname">💄 アイドルメイク体験<span class="dbadge">大玉</span></div><div class="anote">9人全員でK-POPアイドル変身！</div></div></div>
-          <div class="act"><span class="atime">夕方</span><div><div class="aname">📸 弘大でフォトブース撮影</div><div class="anote">アイドルメイクのまま撮影会！인생네컷</div></div></div>
-          <div class="act"><span class="atime">夜</span><div><div class="aname">🥩 サムギョプサルで打ち上げ</div><div class="anote">最高の思い出を語らいながら</div></div></div>
+        <div class="hotel-info-grid">
+          <div class="hotel-info-item">
+            <div class="hotel-info-label">📅 チェックイン</div>
+            <div class="hotel-info-val">2026年5月15日（金）</div>
+            <div class="hotel-info-sub">16:00以降、ご都合の良い時間に</div>
+          </div>
+          <div class="hotel-info-item">
+            <div class="hotel-info-label">📅 チェックアウト</div>
+            <div class="hotel-info-val">2026年5月17日（日）</div>
+            <div class="hotel-info-sub">午前11:00まで</div>
+          </div>
         </div>
-      </div>
-      <div class="dc dc3">
-        <div class="dh"><span class="dn">3</span><div><div class="dht">カロスキル &amp; 帰国</div><div class="dhs">Last Day</div></div></div>
-        <div class="dacts">
-          <div class="act"><span class="atime">朝</span><div><div class="aname">🥐 ホテル周辺でモーニング</div><div class="anote">韓国式朝食でエネルギーチャージ</div></div></div>
-          <div class="act"><span class="atime">午前</span><div><div class="aname">🛍️ カロスキル・新沙洞散策</div><div class="anote">おしゃれショップ＆お土産最終購入</div></div></div>
-          <div class="act"><span class="atime">昼</span><div><div class="aname">🍱 最後のランチ 冷麺 or 参鶏湯</div><div class="anote">帰る前に本場の味を堪能！</div></div></div>
-          <div class="act"><span class="atime">午後</span><div><div class="aname">✈️ 仁川空港 → 帰国</div><div class="anote">空港で最後のショッピングも忘れずに</div></div></div>
+        <div class="hotel-notice">
+          <div class="hotel-notice-title">🔐 プライベートチェックインについて</div>
+          <div class="hotel-notice-text">ドアロックのパスワード制です。チェックイン1時間前にパスワードをお知らせします。</div>
+        </div>
+        <div class="hotel-notice hotel-notice-soft">
+          <div class="hotel-notice-title">💬 早めのチェックイン・レイトチェックアウトについて</div>
+          <div class="hotel-notice-text">ご希望の場合は事前にご連絡ください。</div>
         </div>
       </div>
     </div>
@@ -458,7 +687,7 @@ text-shadow:0 0 12px rgba(255,180,220,.5);
 
 <!-- MAKEUP -->
 
-<div class="mk-sec">
+<div class="mk-sec" id="sec-makeup">
   <div class="inner">
     <div class="slbl">MAIN EVENT</div>
     <h2 class="stitle" style="margin-bottom:36px">大玉企画：アイドルメイク体験</h2>
@@ -492,30 +721,11 @@ text-shadow:0 0 12px rgba(255,180,220,.5);
   </div>
 </div>
 
-<!-- SPOTS -->
-
-<div class="sp-sec">
-  <div class="inn">
-    <div class="slbl">MUST VISIT</div>
-    <h2 class="stitle" style="margin-bottom:32px">行きたいスポット</h2>
-    <div class="sp-grid">
-      <div class="sc"><span class="si">🛍️</span><div class="sn">明洞 (명동)</div><div class="sd">コスメ・ファッション・グルメが集結。OLIVE YOUNG 本店が必訪！</div></div>
-      <div class="sc"><span class="si">📸</span><div class="sn">弘大 (홍대)</div><div class="sd">인생네컷（フォトブース）が街中に！若者文化とナイトライフの中心地。</div></div>
-      <div class="sc"><span class="si">🏛️</span><div class="sn">景福宮 (경복궁)</div><div class="sd">韓服レンタルで王宮を散策。インスタ映え間違いなし。</div></div>
-      <div class="sc"><span class="si">☕</span><div class="sn">聖水洞 (성수동)</div><div class="sd">ソウルのブルックリン。個性的カフェ＆コンセプトストアが密集。</div></div>
-      <div class="sc"><span class="si">🌿</span><div class="sn">カロスキル (가로수길)</div><div class="sd">おしゃれなブティック＆カフェが並ぶ、大人の女子旅ストリート。</div></div>
-      <div class="sc"><span class="si">🌃</span><div class="sn">Nソウルタワー</div><div class="sd">夜景が最高！南山の頂上からソウル全体を一望できる。</div></div>
-      <div class="sc"><span class="si">🍖</span><div class="sn">サムギョプサル</div><div class="sd">本場のサムギョプサル・ダッカルビを現地で。値段も安くて最高！</div></div>
-      <div class="sc"><span class="si">💿</span><div class="sn">SM / HYBE ショップ</div><div class="sd">推しグッズを現地調達！公式グッズが揃う聖地巡礼スポット。</div></div>
-    </div>
-  </div>
-</div>
-
 <div class="dvd"></div>
 
 <!-- PACKING LIST -->
 
-<div class="pk-sec">
+<div class="pk-sec" id="sec-packing">
   <div class="inn">
     <div class="slbl" style="color:#FF45D8">PACKING LIST</div>
     <h2 class="stitle" style="color:#fff;text-shadow:3px 3px 0 rgba(255,28,168,.4);margin-bottom:28px">持ち物リスト</h2>
@@ -613,9 +823,211 @@ text-shadow:0 0 12px rgba(255,180,220,.5);
   </div>
 </div>
 
+<!-- SPOTS -->
+
+<div class="sp-sec" id="sec-spots">
+  <div class="inn">
+    <div class="slbl">RECOMMEND</div>
+    <h2 class="stitle" style="margin-bottom:8px">おすすめスポット</h2>
+    <p class="sp-intro">エリアとカテゴリ別にまとめました！</p>
+
+```
+<!-- ソンス -->
+<div class="sp-area-block">
+  <div class="sp-area-label">
+    <span class="sp-area-icon">📍</span>
+    <span>聖水洞（ソンス）</span>
+  </div>
+
+  <div class="sp-cat-label">👗 服</div>
+  <div class="sp-grid">
+    <a href="https://maps.app.goo.gl/iKTwngSFeA9ExebX6" target="_blank" class="sc sc-link">
+      <span class="si">👗</span><div class="sn">Matin Kim</div><div class="sd">人気韓国ブランド。おしゃれ必訪！</div>
+      <div class="sc-map">📍 地図で見る</div>
+    </a>
+    <a href="https://maps.app.goo.gl/WW5g6Uhq22kYvMAz9" target="_blank" class="sc sc-link">
+      <span class="si">👗</span><div class="sn">베이델리 성수스토어</div><div class="sd">ベイデリ・ソンス店。トレンドアイテム揃い</div>
+      <div class="sc-map">📍 地図で見る</div>
+    </a>
+    <a href="https://maps.app.goo.gl/kegesqMteSGBxQMC8" target="_blank" class="sc sc-link">
+      <span class="si">👗</span><div class="sn">Brandy Melville Korea</div><div class="sd">ブランディメルビル韓国店</div>
+      <div class="sc-map">📍 地図で見る</div>
+    </a>
+    <a href="https://maps.app.goo.gl/RGXkeBgiST1Gnw6r9" target="_blank" class="sc sc-link">
+      <span class="si">👗</span><div class="sn">SATURHOUSE 세터하우스</div><div class="sd">セターハウス・ソンス。上3店とほぼ同じ場所！</div>
+      <div class="sc-map">📍 地図で見る</div>
+    </a>
+  </div>
+  <p class="sp-tip">💡 上4店舗はほぼ同じ場所（城東区 聖水洞二街 272-39）にまとまってます！</p>
+
+  <div class="sp-cat-label">🌸 フレグランス</div>
+  <div class="sp-grid">
+    <a href="https://maps.app.goo.gl/j5bzwHA9bqZhacDH8" target="_blank" class="sc sc-link">
+      <span class="si">🌸</span><div class="sn">Hetras</div><div class="sd">ソンスのフレグランスショップ</div>
+      <div class="sc-map">📍 地図で見る</div>
+    </a>
+  </div>
+
+  <div class="sp-cat-label">🛍️ 雑貨</div>
+  <div class="sp-grid">
+    <a href="https://maps.app.goo.gl/16NGg4FhBwY3SV6E7" target="_blank" class="sc sc-link">
+      <span class="si">🕶️</span><div class="sn">BLUE elephant</div><div class="sd">サングラス専門店。おしゃれな一本を</div>
+      <div class="sc-map">📍 地図で見る</div>
+    </a>
+    <a href="https://maps.app.goo.gl/zt6L8p8pSqa5FKh67" target="_blank" class="sc sc-link">
+      <span class="si">🕯️</span><div class="sn">ヘブンセブン</div><div class="sd">お香屋さん。いい香りのお土産に◎</div>
+      <div class="sc-map">📍 地図で見る</div>
+    </a>
+    <a href="https://maps.app.goo.gl/nmsQ6PAeser4FUnq6" target="_blank" class="sc sc-link">
+      <span class="si">🧴</span><div class="sn">Knock Archive</div><div class="sd">スキンケア系セレクトショップ</div>
+      <div class="sc-map">📍 地図で見る</div>
+    </a>
+    <a href="https://maps.app.goo.gl/85w4v9titBXeQ1ht9" target="_blank" class="sc sc-link">
+      <span class="si">🐰</span><div class="sn">ミッフィーストアソウル</div><div class="sd">ミッフィー好きは必訪！</div>
+      <div class="sc-map">📍 地図で見る</div>
+    </a>
+    <a href="https://maps.app.goo.gl/yxUxR7wsby6ttWKB8" target="_blank" class="sc sc-link">
+      <span class="si">💊</span><div class="sn">オリーブヤング N聖水</div><div class="sd">聖水のオリーブヤング旗艦店</div>
+      <div class="sc-map">📍 地図で見る</div>
+    </a>
+  </div>
+
+  <div class="sp-cat-label">💆 ヘアケア</div>
+  <div class="sp-grid">
+    <a href="https://maps.app.goo.gl/AArbJ1wirV4fvGra8" target="_blank" class="sc sc-link">
+      <span class="si">💆</span><div class="sn">lador</div><div class="sd">韓国人気ヘアケアブランドの直営店</div>
+      <div class="sc-map">📍 地図で見る</div>
+    </a>
+  </div>
+
+  <div class="sp-cat-label">🥐 モーニング</div>
+  <div class="sp-grid">
+    <a href="https://maps.app.goo.gl/iCQUb8uExCspsRjw6" target="_blank" class="sc sc-link">
+      <span class="si">🥛</span><div class="sn">lazyヨーグルト</div><div class="sd">ヘルシーなヨーグルトで朝ごはん</div>
+      <div class="sc-map">📍 地図で見る</div>
+    </a>
+    <a href="https://maps.app.goo.gl/rZVgfvcMh4tV3X9m7" target="_blank" class="sc sc-link">
+      <span class="si">🥯</span><div class="sn">ベーグル屋さん</div><div class="sd">朝のベーグルを現地で！</div>
+      <div class="sc-map">📍 地図で見る</div>
+    </a>
+    <a href="https://maps.app.goo.gl/AUNkq9dw8jKFGLpf9" target="_blank" class="sc sc-link">
+      <span class="si">🍞</span><div class="sn">onions パン屋</div><div class="sd">ソンスの人気パン屋さん</div>
+      <div class="sc-map">📍 地図で見る</div>
+    </a>
+  </div>
+</div>
+
+<!-- 東大門 -->
+<div class="sp-area-block">
+  <div class="sp-area-label">
+    <span class="sp-area-icon">📍</span>
+    <span>東大門（トンデムン）</span>
+  </div>
+
+  <div class="sp-cat-label">🛍️ 雑貨・小物</div>
+  <div class="sp-grid">
+    <a href="https://maps.app.goo.gl/5jAuGfrPakUXd4MH9" target="_blank" class="sc sc-link">
+      <span class="si">💍</span><div class="sn">NYUNYU</div><div class="sd">ピアス・アクセサリー・小物がずらり</div>
+      <div class="sc-map">📍 地図で見る</div>
+    </a>
+    <a href="https://maps.app.goo.gl/r7R1MzYtfNf3R9JCA" target="_blank" class="sc sc-link">
+      <span class="si">💍</span><div class="sn">mimiline</div><div class="sd">ピアス・小物の宝庫。まとめ買い必至！</div>
+      <div class="sc-map">📍 地図で見る</div>
+    </a>
+    <a href="https://maps.app.goo.gl/DNrDQDK9oRqFBrtu8" target="_blank" class="sc sc-link">
+      <span class="si">🧸</span><div class="sn">Good people</div><div class="sd">編みぐるみがかわいい！お土産にも◎</div>
+      <div class="sc-map">📍 地図で見る</div>
+    </a>
+  </div>
+
+  <div class="sp-cat-label">💄 コスメ</div>
+  <div class="sp-grid">
+    <a href="https://maps.app.goo.gl/GbTYjgwjGHG1SFdp7" target="_blank" class="sc sc-link">
+      <span class="si">💊</span><div class="sn">オリーブヤング</div><div class="sd">東大門店。コスメ・スキンケアを爆買い！</div>
+      <div class="sc-map">📍 地図で見る</div>
+    </a>
+    <a href="https://maps.app.goo.gl/Qsenr3Hr9QanKuDY8" target="_blank" class="sc sc-link">
+      <span class="si">💄</span><div class="sn">TheMASK SHOP</div><div class="sd">激安コスメ＆お土産の宝庫！</div>
+      <div class="sc-map">📍 地図で見る</div>
+    </a>
+    <a href="https://maps.app.goo.gl/9fvPSyhaDESApsz89" target="_blank" class="sc sc-link">
+      <span class="si">✨</span><div class="sn">OFF beauty</div><div class="sd">おすすめコスメショップ</div>
+      <div class="sc-map">📍 地図で見る</div>
+    </a>
+  </div>
+
+  <div class="sp-cat-label">🛒 スーパー</div>
+  <div class="sp-grid">
+    <a href="https://maps.app.goo.gl/CJ4H6dAk9GEAbnEeA" target="_blank" class="sc sc-link">
+      <span class="si">🛒</span><div class="sn">No Brand</div><div class="sd">韓国のコスパ最強スーパー。お菓子・食品のお土産に！</div>
+      <div class="sc-map">📍 地図で見る</div>
+    </a>
+  </div>
+</div>
+
+<!-- 明洞 -->
+<div class="sp-area-block">
+  <div class="sp-area-label">
+    <span class="sp-area-icon">📍</span>
+    <span>明洞（ミョンドン）</span>
+  </div>
+
+  <div class="sp-cat-label">👗 服</div>
+  <div class="sp-grid">
+    <a href="https://maps.app.goo.gl/WMXJUbdtFn9CwU6U7" target="_blank" class="sc sc-link">
+      <span class="si">👟</span><div class="sn">adidas</div><div class="sd">明洞のアディダス。限定アイテムもチェック！</div>
+      <div class="sc-map">📍 地図で見る</div>
+    </a>
+    <a href="https://maps.app.goo.gl/AY89hN8xEq3xqDCh9" target="_blank" class="sc sc-link">
+      <span class="si">👗</span><div class="sn">nyunyu</div><div class="sd">明洞店。トレンドのアイテムが揃う</div>
+      <div class="sc-map">📍 地図で見る</div>
+    </a>
+  </div>
+
+  <div class="sp-cat-label">💄 コスメ</div>
+  <div class="sp-grid">
+    <a href="https://maps.app.goo.gl/yxQjGPoGJRZdXBAo7" target="_blank" class="sc sc-link">
+      <span class="si">🧴</span><div class="sn">SKIN1004</div><div class="sd">話題の韓国スキンケアブランド直営店</div>
+      <div class="sc-map">📍 地図で見る</div>
+    </a>
+  </div>
+</div>
+
+<!-- 夜ごはん -->
+<div class="sp-area-block">
+  <div class="sp-area-label">
+    <span class="sp-area-icon">🍽️</span>
+    <span>夜ごはん</span>
+  </div>
+
+  <div class="sp-cat-label">🥩 焼肉</div>
+  <div class="sp-grid">
+    <a href="https://maps.app.goo.gl/GpjgfhezDcrQgkim8" target="_blank" class="sc sc-link">
+      <span class="si">🐷</span><div class="sn">金豚（クムドン）</div><div class="sd">人気の豚焼肉店。ここはハズレなし！</div>
+      <div class="sc-map">📍 地図で見る</div>
+    </a>
+    <a href="https://maps.app.goo.gl/LZahuPTqhTukGQi8" target="_blank" class="sc sc-link">
+      <span class="si">🥩</span><div class="sn">ユッチュタン</div><div class="sd">東大門の焼肉屋さん</div>
+      <div class="sc-map">📍 地図で見る</div>
+    </a>
+  </div>
+
+  <div class="sp-cat-label">🍗 タッカンマリ</div>
+  <div class="sp-grid">
+    <a href="https://maps.app.goo.gl/tFVp427v7AL9x3Yj6" target="_blank" class="sc sc-link">
+      <span class="si">🍗</span><div class="sn">陳玉華ハルメ元祖タッカンマリ</div><div class="sd">東大門の超有名店。丸鶏の鍋料理！</div>
+      <div class="sc-map">📍 地図で見る</div>
+    </a>
+  </div>
+</div>
+```
+
+  </div>
+</div>
+
 <!-- TIPS -->
 
-<div class="tp-sec">
+<div class="tp-sec" id="sec-tips">
   <div class="inn">
     <div class="slbl">TIPS</div>
     <h2 class="stitle" style="margin-bottom:32px">知っておきたい情報</h2>
@@ -657,7 +1069,29 @@ window.addEventListener('DOMContentLoaded',upd);
 </script>
 
 <script>
-// ✨ キラキラパーティクル
+// Googleマップiframe読み込み失敗時のフォールバック
+(function(){
+  var iframe = document.querySelector('.gmap-iframe');
+  var fallback = document.getElementById('gmapFallback');
+  if(!iframe || !fallback) return;
+  // iframeがエラーになったらフォールバック表示
+  iframe.addEventListener('error', function(){
+    iframe.style.display = 'none';
+    fallback.classList.add('show');
+  });
+  // 5秒後にiframeの高さが0なら（ブロックされた場合）フォールバック表示
+  setTimeout(function(){
+    try {
+      if(iframe.contentDocument && iframe.contentDocument.body &&
+         iframe.contentDocument.body.innerHTML === '') {
+        iframe.style.display = 'none';
+        fallback.classList.add('show');
+      }
+    } catch(e) {
+      // クロスオリジンのためアクセス不可＝読み込み中 → そのまま表示
+    }
+  }, 5000);
+})();
 (function(){
   var container = document.getElementById('particles');
   if(!container) return;
@@ -690,6 +1124,22 @@ window.addEventListener('DOMContentLoaded',upd);
   for(var i=0;i<40;i++) spawn();
   setInterval(spawn, 300);
 })();
+</script>
+
+<script>
+// スムーズスクロール（sticky navの高さ考慮）
+document.querySelectorAll('.toc-link').forEach(function(link) {
+  link.addEventListener('click', function(e) {
+    var href = this.getAttribute('href');
+    if (!href || href[0] !== '#') return;
+    var target = document.querySelector(href);
+    if (!target) return;
+    e.preventDefault();
+    var offset = 60;
+    var top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+    window.scrollTo({ top: top, behavior: 'smooth' });
+  });
+});
 </script>
 
 </body>
