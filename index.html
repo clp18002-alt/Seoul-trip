@@ -156,37 +156,51 @@ to   { opacity:1;  transform:scale(1.05); }
 .map-title { font-family:‘M PLUS Rounded 1c’,sans-serif; font-weight:900; font-size:clamp(36px,8vw,62px); color:var(–deep); text-align:center; line-height:.95; margin-bottom:36px; }
 .map-title em { font-style:normal; color:var(–hot); text-shadow:3px 3px 0 rgba(255,28,168,.2); }
 .map-title strong { display:block; color:var(–purple); font-size:.45em; letter-spacing:6px; }
-.gmap-wrap {
+.gmap-card {
 max-width:760px; margin:0 auto 48px;
-position:relative; border-radius:20px; overflow:hidden;
-box-shadow:5px 5px 0 rgba(255,28,168,.2), 0 8px 40px rgba(0,0,0,.1);
+background:#fff;
+border-radius:20px;
 border:2px solid #FFB3E6;
-aspect-ratio:4/3;
+box-shadow:5px 5px 0 rgba(255,28,168,.15);
+display:grid; grid-template-columns:1fr 1fr; overflow:hidden;
 }
-.gmap-iframe {
-width:100%; height:100%; border:none; display:block;
-}
-.gmap-fallback {
-display:none; position:absolute; inset:0;
+@media(max-width:560px){ .gmap-card { grid-template-columns:1fr; } }
+.gmap-card-left {
+padding:36px 32px;
 background:linear-gradient(160deg,#FDE8FF,#FFD6F0);
-align-items:center; justify-content:center; text-align:center;
+display:flex; flex-direction:column; gap:14px;
 }
-.gmap-fallback.show { display:flex; }
-.gmap-fallback-title {
+.gmap-emoji { font-size:52px; }
+.gmap-card-title {
 font-family:‘M PLUS Rounded 1c’,sans-serif; font-weight:900;
-font-size:20px; color:var(–deep); margin-bottom:8px;
+font-size:20px; color:var(–deep);
 }
-.gmap-fallback-sub {
-font-size:13px; color:#999; margin-bottom:20px;
+.gmap-card-sub {
+font-size:13px; font-weight:700; color:#888; line-height:1.7;
 }
-.gmap-btn {
+.gmap-open-btn {
 display:inline-block; background:var(–hot); color:#fff;
 font-family:‘M PLUS Rounded 1c’,sans-serif; font-weight:900;
-font-size:14px; padding:12px 24px; border-radius:8px;
+font-size:14px; padding:13px 24px; border-radius:10px;
 text-decoration:none; box-shadow:3px 3px 0 rgba(255,28,168,.3);
-transition:all .2s;
+transition:all .2s; text-align:center; margin-top:4px;
 }
-.gmap-btn:hover { transform:translate(-2px,-2px); box-shadow:5px 5px 0 rgba(255,28,168,.4); }
+.gmap-open-btn:hover { transform:translate(-2px,-2px); box-shadow:5px 5px 0 rgba(255,28,168,.4); }
+.gmap-card-right {
+padding:36px 28px;
+display:flex; align-items:center;
+}
+.gmap-pin-list {
+display:flex; flex-direction:column; gap:12px; width:100%;
+}
+.gmap-pin-item {
+display:flex; align-items:center; gap:10px;
+font-family:‘M PLUS Rounded 1c’,sans-serif; font-weight:800;
+font-size:14px; color:var(–deep);
+padding:8px 12px; background:#FFF0FA; border-radius:8px;
+border:1px solid #FFB3E6;
+}
+.gpin { font-size:16px; }
 
 /* OVERVIEW GRID */
 .ov-grid { max-width:760px; margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); background:#fff; border-radius:16px; overflow:hidden; border:2px solid #FFB3E6; box-shadow:5px 5px 0 rgba(255,28,168,.2); }
@@ -536,20 +550,23 @@ scroll-margin-top: 60px;
 <div class="map-pg" id="sec-map">
   <div class="slbl c">SPOT MAP</div>
   <h2 class="map-title"><em>Seoul</em><strong>行き先マップ</strong></h2>
-  <div class="gmap-wrap">
-    <iframe
-      src="https://www.google.com/maps/d/embed?mid=niuuZEzPIfWc16A7fCSEeA"
-      class="gmap-iframe"
-      allowfullscreen
-      loading="lazy"
-      referrerpolicy="no-referrer-when-downgrade">
-    </iframe>
-    <div class="gmap-fallback" id="gmapFallback">
-      <div class="gmap-fallback-inner">
-        <div style="font-size:48px;margin-bottom:16px">🗺️</div>
-        <div class="gmap-fallback-title">Googleマップで見る</div>
-        <div class="gmap-fallback-sub">タップしてマップリストを開く</div>
-        <a href="https://www.google.com/maps/placelists/list/niuuZEzPIfWc16A7fCSEeA?token=BEess9TSJnY&g_ep=CAISEjI2LjExLjEuODgxMDA1NjQ2MBgAILffASpSLDk0Mjk3Njk5LDEwMDgwNDUwOCw5NDI4NDUwNSw5NDIzMTE4OCw5NDI4MDU2OCw0NzA3MTcwNCw5NDIxODY0MSw5NDI4MjEzNCw5NDI4Njg2OUICSlA%3D&skid=3baf2972-f8fb-4828-ac5a-a4c4848bfc86&g_st=i" target="_blank" class="gmap-btn">📍 マップリストを開く →</a>
+  <div class="gmap-card">
+    <div class="gmap-card-left">
+      <div class="gmap-emoji">🗺️</div>
+      <div class="gmap-card-title">ソウル行き先マップ</div>
+      <div class="gmap-card-sub">ショップ・グルメ・観光スポットをまとめてGoogleマップで確認できます</div>
+      <a href="https://www.google.com/maps/placelists/list/niuuZEzPIfWc16A7fCSEeA?token=BEess9TSJnY&g_ep=CAISEjI2LjExLjEuODgxMDA1NjQ2MBgAILffASpSLDk0Mjk3Njk5LDEwMDgwNDUwOCw5NDI4NDUwNSw5NDIzMTE4OCw5NDI4MDU2OCw0NzA3MTcwNCw5NDIxODY0MSw5NDI4MjEzNCw5NDI4Njg2OUICSlA%3D&skid=3baf2972-f8fb-4828-ac5a-a4c4848bfc86&g_st=i" target="_blank" class="gmap-open-btn">
+        📍 Googleマップで開く →
+      </a>
+    </div>
+    <div class="gmap-card-right">
+      <div class="gmap-pin-list">
+        <div class="gmap-pin-item"><span class="gpin">📍</span><span>聖水洞（ソンス）</span></div>
+        <div class="gmap-pin-item"><span class="gpin">📍</span><span>東大門（トンデムン）</span></div>
+        <div class="gmap-pin-item"><span class="gpin">📍</span><span>明洞（ミョンドン）</span></div>
+        <div class="gmap-pin-item"><span class="gpin">📍</span><span>漢江（ハンガン）公園</span></div>
+        <div class="gmap-pin-item"><span class="gpin">📍</span><span>reverie__studio</span></div>
+        <div class="gmap-pin-item"><span class="gpin">📍</span><span>ホテル</span></div>
       </div>
     </div>
   </div>
